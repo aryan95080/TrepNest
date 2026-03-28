@@ -1,0 +1,35 @@
+<div class="m-2 right-3 sm:right-5 w-full sm:w-auto flex flex-col items-end px-3">
+
+  <% if(success && success.length){ %>
+  <div class="flex items-center justify-between gap-4 
+  bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg
+  w-full  mb-3">
+
+    <span class="text-sm sm:text-base"><%= success %></span>
+
+    <button 
+      onclick="this.parentElement.remove()" 
+      class="text-xl font-bold hover:opacity-70">
+      &times;
+    </button>
+
+  </div>
+  <% } %>
+
+  <% if(error && error.length){ %>
+  <div class="flex items-center justify-between gap-4 
+  bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg
+  w-full ">
+
+    <span class="text-sm sm:text-base"><%= error %></span>
+
+    <button 
+      onclick="this.parentElement.remove()" 
+      class="text-xl font-bold hover:opacity-70">
+      &times;
+    </button>
+
+  </div>
+  <% } %>
+
+</div>

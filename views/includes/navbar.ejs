@@ -1,0 +1,346 @@
+<nav class="bg-white/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+
+      <!-- Logo -->
+      <a href="/tripnests"
+        class="flex items-center gap-2 font-bold text-xl text-gray-800 hover:text-amber-500 transition-colors">
+        <img src="/assets/logo.png" class="h-8 md:h-9 w-auto" alt="TripNest Logo">
+        <span class="hidden xs:inline">TripNest</span>
+      </a>
+
+      <!-- Desktop Search -->
+      <div class="hidden md:flex flex-1 justify-center px-4">
+
+        <form action="/tripnests" method="GET" class="relative flex items-center w-full max-w-xl">
+
+          <!-- Search Icon -->
+          <i class="fa-solid fa-magnifying-glass absolute left-4 text-gray-400 text-sm"></i>
+
+          <input name="search" type="search" placeholder="Search destinations, cities, places..." class="w-full pl-10 pr-24 py-3 text-sm border border-gray-200 rounded-full bg-gray-50
+focus:bg-white focus:border-amber-400 focus:ring-2 focus:ring-amber-200
+outline-none transition shadow-sm" aria-label="Search destinations">
+
+          <button type="submit" class="absolute right-1 bg-amber-500 hover:bg-amber-600 text-white
+px-5 py-2 rounded-full text-sm font-medium shadow-sm transition">
+
+            Search
+
+          </button>
+
+        </form>
+
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center gap-4 lg:gap-6">
+        <a href="/tripnests/new"
+          class="text-gray-700 hover:text-amber-500 font-medium transition-colors px-3 py-2 text-sm lg:text-base">
+          Add Trip
+        </a>
+        <a href="/tripnests/about"
+          class="text-gray-700 hover:text-amber-500 font-medium transition-colors px-3 py-2 text-sm lg:text-base">
+          About
+        </a>
+
+        <% if(!currUser) { %>
+          <div class="flex items-center gap-2">
+            <a href="/login"
+              class="px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors text-sm lg:text-base">
+              Login
+            </a>
+            <a href="/signup"
+              class="px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors text-sm lg:text-base shadow-sm">
+              Sign Up
+            </a>
+          </div>
+          <% } else { %>
+            <!-- Profile Dropdown -->
+            <div class="relative" data-dropdown>
+              <button
+                class="flex items-center gap-2 border rounded-full pl-1 pr-3 py-1 hover:shadow-md transition-all hover:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                aria-expanded="false" aria-haspopup="true" data-dropdown-button>
+                <img src="<%= currUser.image && currUser.image.url ? currUser.image.url : '/assets/user.png' %>"
+                  class="w-8 h-8 rounded-full object-cover border-2 border-white" alt="<%= currUser.name || 'User' %>">
+                <i class="fa-solid fa-chevron-down text-xs text-gray-500 transition-transform" data-dropdown-icon></i>
+              </button>
+
+              <div class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl border py-2 z-50"
+                data-dropdown-menu>
+                <div class="px-4 py-2 border-b">
+                  <p class="text-sm font-medium text-gray-900">
+                    <%= currUser.name || 'User' %>
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">
+                    <%= currUser.email %>
+                  </p>
+                </div>
+
+                <a href="/dashboard" class="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                  <i class="fa-solid fa-gauge w-4 text-gray-500"></i>
+                  Dashboard
+                </a>
+                <a href="/my-bookings" class="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                  <i class="fa-solid fa-calendar-check w-4 text-gray-500"></i>
+                  My Bookings
+                </a>
+                <a href="/tripnests/new" class="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                  <i class="fa-solid fa-plus w-4 text-gray-500"></i>
+                  Add Trip
+                </a>
+
+                <hr class="my-2">
+
+                <a href="/logout"
+                  class="flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-50 transition-colors">
+                  <i class="fa-solid fa-sign-out-alt w-4"></i>
+                  Logout
+                </a>
+              </div>
+            </div>
+            <% } %>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menuBtn"
+        class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500"
+        aria-label="Toggle menu" aria-expanded="false">
+        <i id="menuIcon" class="fa-solid fa-bars text-xl text-gray-700"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Search & Menu -->
+  <div id="mobileMenu" class="hidden md:hidden">
+    <!-- Mobile Search -->
+    <div class="bg-white border-t px-4 py-3">
+      <form action="/tripnests" method="GET"
+        class="flex items-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors focus-within:ring-2 focus-within:ring-gray-500 focus-within:bg-white">
+        <input name="search" placeholder="Search destinations..."
+          class="flex-grow bg-transparent outline-none px-4 py-2.5 text-sm rounded-l-full"
+          aria-label="Search destinations">
+        <button class="text-amber-500 hover:text-amber-600 p-2.5 mx-1" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Mobile Menu Items -->
+    <div class="bg-white shadow-lg max-h-[80vh] overflow-y-auto">
+      <div class="px-4 py-5 space-y-1">
+        <!-- User Info for Mobile -->
+        <% if(currUser) { %>
+          <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg mb-4">
+            <img src="<%= currUser.image && currUser.image.url ? currUser.image.url : '/assets/user.png' %>"
+              class="w-12 h-12 rounded-full object-cover border-2 border-white" alt="<%= currUser.name || 'User' %>">
+            <div>
+              <p class="font-medium text-gray-900">
+                <%= currUser.name || 'User' %>
+              </p>
+              <p class="text-sm text-gray-500">
+                <%= currUser.email %>
+              </p>
+            </div>
+          </div>
+          <% } %>
+
+            <a href="/tripnests"
+              class="flex items-center gap-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+              <i class="fa-solid fa-home w-5 text-gray-500"></i>
+              Home
+            </a>
+            <a href="/tripnests/new"
+              class="flex items-center gap-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+              <i class="fa-solid fa-plus-circle w-5 text-gray-500"></i>
+              Add Trip
+            </a>
+            <a href="/tripnests/about"
+              class="flex items-center gap-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+              <i class="fa-solid fa-info-circle w-5 text-gray-500"></i>
+              About
+            </a>
+
+            <% if(currUser) { %>
+              <hr class="my-2">
+              <a href="/dashboard"
+                class="flex items-center gap-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                <i class="fa-solid fa-gauge w-5 text-gray-500"></i>
+                Dashboard
+              </a>
+              <a href="/my-bookings"
+                class="flex items-center gap-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                <i class="fa-solid fa-calendar-check w-5 text-gray-500"></i>
+                My Bookings
+              </a>
+              <hr class="my-2">
+              <a href="/logout"
+                class="flex items-center gap-3 px-3 py-3 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                <i class="fa-solid fa-sign-out-alt w-5"></i>
+                Logout
+              </a>
+              <% } else { %>
+                <hr class="my-2">
+                <a href="/login"
+                  class="flex items-center gap-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                  <i class="fa-solid fa-sign-in-alt w-5 text-gray-500"></i>
+                  Login
+                </a>
+                <a href="/signup"
+                  class="flex items-center gap-3 px-3 py-3 bg-amber-500 text-white hover:bg-amber-600 rounded-lg transition-colors mt-2">
+                  <i class="fa-solid fa-user-plus w-5"></i>
+                  Sign Up
+                </a>
+                <% } %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  (function () {
+    'use strict';
+
+    // Mobile Menu Toggle with improved accessibility
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+
+    if (menuBtn && mobileMenu && menuIcon) {
+      function toggleMobileMenu(show) {
+        const isOpen = show !== undefined ? show : mobileMenu.classList.contains('hidden');
+
+        if (isOpen) {
+          mobileMenu.classList.remove('hidden');
+          menuIcon.classList.replace('fa-bars', 'fa-xmark');
+          menuBtn.setAttribute('aria-expanded', 'true');
+          document.body.style.overflow = 'hidden';
+        } else {
+          mobileMenu.classList.add('hidden');
+          menuIcon.classList.replace('fa-xmark', 'fa-bars');
+          menuBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      }
+
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+      });
+
+      // Close mobile menu on window resize if open
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768 && !mobileMenu.classList.contains('hidden')) {
+          toggleMobileMenu(false);
+        }
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.classList.contains('hidden') &&
+          !mobileMenu.contains(e.target) &&
+          !menuBtn.contains(e.target)) {
+          toggleMobileMenu(false);
+        }
+      });
+    }
+
+    // Profile Dropdown with improved UX
+    const dropdowns = document.querySelectorAll('[data-dropdown]');
+
+    dropdowns.forEach(dropdown => {
+      const button = dropdown.querySelector('[data-dropdown-button]');
+      const menu = dropdown.querySelector('[data-dropdown-menu]');
+      const icon = dropdown.querySelector('[data-dropdown-icon]');
+
+      if (button && menu) {
+        function toggleDropdown(show) {
+          const isOpen = show !== undefined ? show : menu.classList.contains('hidden');
+
+          if (isOpen) {
+            menu.classList.remove('hidden');
+            button.setAttribute('aria-expanded', 'true');
+            if (icon) icon.style.transform = 'rotate(180deg)';
+          } else {
+            menu.classList.add('hidden');
+            button.setAttribute('aria-expanded', 'false');
+            if (icon) icon.style.transform = '';
+          }
+        }
+
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleDropdown();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!menu.classList.contains('hidden') &&
+            !dropdown.contains(e.target)) {
+            toggleDropdown(false);
+          }
+        });
+
+        // Close dropdown on escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+            toggleDropdown(false);
+            button.focus();
+          }
+        });
+      }
+    });
+
+    // Add smooth scroll behavior for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+
+  })();
+</script>
+
+<!-- Add this CSS in your stylesheet for better responsiveness -->
+<style>
+  /* Custom breakpoint for extra small devices */
+  @media (min-width: 480px) {
+    .xs\:inline {
+      display: inline;
+    }
+  }
+
+  /* Smooth transitions */
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+
+  /* Prevent body scroll when mobile menu is open */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* Improve touch targets on mobile */
+  @media (max-width: 767px) {
+
+    button,
+    a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 2px;
+  }
+</style>

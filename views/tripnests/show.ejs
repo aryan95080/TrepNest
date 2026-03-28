@@ -1,0 +1,155 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="max-w-6xl mx-auto px-4 py-6">
+
+  <!-- Main Property Card -->
+  <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+    <img src="<%= tripNest.image.url %>" 
+         class="w-full h-64 sm:h-96 md:h-[450px] object-cover">
+    
+    <div class="p-5 sm:p-6">
+      <!-- Owner & Title -->
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-sm text-gray-600">Owned by 
+          <span class="font-semibold text-amber-600"><%= tripNest.owner.username %></span>
+        </p>
+        <% if(currUser && tripNest.owner._id.equals(currUser._id)){ %>
+          <div class="flex gap-2">
+            <a href="/tripnests/<%= tripNest._id %>/edit" 
+               class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Edit</a>
+            <form action="/tripnests/<%=tripNest._id%>?_method=DELETE" method="POST">
+              <button class="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Delete</button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+      
+      <h1 class="text-2xl sm:text-3xl font-bold mb-2"><%= tripNest.title %></h1>
+      <p class="text-gray-500 text-sm mb-3">📍 <%= tripNest.location %>, <%= tripNest.country %></p>
+      <p class="text-gray-600 mb-4"><%= tripNest.description %></p>
+      <p class="text-2xl font-bold text-amber-600">₹ <%= tripNest.price.toLocaleString("en-IN") %> <span class="text-base font-normal text-gray-500">/ night</span></p>
+      
+      <div class="mt-5">
+        <a href="/tripnests/<%= tripNest._id %>/booking" 
+           class="inline-block bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
+          Book Now →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Section -->
+<div class="bg-white rounded-2xl shadow-lg p-5 sm:p-6 mb-8">
+  <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">⭐ Leave a Review</h2>
+  
+  <% if(currUser){ %>
+    <form action="/tripnests/<%=tripNest._id%>/reviews" method="POST" class="space-y-4">
+
+      <!-- Star Rating -->
+      <div>
+        <label class="font-semibold block mb-2">Your Rating</label>
+
+        <div id="starRating" class="flex gap-2 text-3xl cursor-pointer text-gray-300">
+          <span data-value="1">★</span>
+          <span data-value="2">★</span>
+          <span data-value="3">★</span>
+          <span data-value="4">★</span>
+          <span data-value="5">★</span>
+        </div>
+
+        <!-- Default rating = 3 -->
+        <input type="hidden" name="review[rating]" id="ratingValue" value="3">
+      </div>
+
+      <!-- Comment -->
+      <textarea name="review[comment]" rows="3" 
+        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none resize-none"
+        placeholder="Share your experience..."></textarea>
+      
+      <button class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md">
+        Submit Review
+      </button>
+
+    </form>
+  <% } else { %>
+    <p class="text-gray-500 bg-gray-50 rounded-xl p-4 text-center">
+      🔐 Please <a href="/login" class="text-amber-600 font-semibold hover:underline">login</a> to leave a review
+    </p>
+  <% } %>
+</div>
+
+  <!-- All Reviews Grid -->
+  <% if(tripNest.reviews && tripNest.reviews.length > 0){ %>
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">📝 Guest Reviews (<%= tripNest.reviews.length %>)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <% for(let review of tripNest.reviews){ %>
+          <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-amber-400">
+            <div class="flex items-center justify-between mb-2">
+              <p class="font-bold text-amber-700"><%= review.author.username %></p>
+              <p class="text-amber-500 text-sm font-medium"><%= review.rating %> ★</p>
+            </div>
+            <p class="text-gray-600"><%= review.comment %></p>
+            <% if(currUser && review.author._id.equals(currUser._id)){ %>
+              <form action="/tripnests/<%=tripNest._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mt-3">
+                <button class="text-xs bg-red-100 hover:bg-red-500 text-red-600 hover:text-white px-3 py-1.5 rounded-lg transition">Delete</button>
+              </form>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Map Section -->
+  <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div class="p-5 border-b border-gray-100">
+      <h3 class="text-xl font-bold text-center text-gray-800">📍 Location</h3>
+    </div>
+    <div id="map" class="w-full h-80 sm:h-96"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  const stars = document.querySelectorAll("#starRating span");
+  const ratingInput = document.getElementById("ratingValue");
+
+  let defaultRating = 3;
+
+  function highlightStars(rating){
+    stars.forEach((s,i)=>{
+      if(i < rating){
+        s.classList.add("text-yellow-400");
+        s.classList.remove("text-gray-300");
+      }else{
+        s.classList.add("text-gray-300");
+        s.classList.remove("text-yellow-400");
+      }
+    });
+  }
+
+  // default highlight
+  highlightStars(defaultRating);
+
+  stars.forEach(star=>{
+    star.addEventListener("click",()=>{
+      let rating = star.dataset.value;
+      ratingInput.value = rating;
+      highlightStars(rating);
+    });
+  });
+
+});
+document.addEventListener("DOMContentLoaded", function() {
+  var map = L.map('map').setView([<%= tripNest.geometry ? tripNest.geometry.coordinates[1] : 23.2599 %>, <%= tripNest.geometry ? tripNest.geometry.coordinates[0] : 77.4126 %>], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  L.marker([<%= tripNest.geometry ? tripNest.geometry.coordinates[1] : 23.2599 %>, <%= tripNest.geometry ? tripNest.geometry.coordinates[0] : 77.4126 %>])
+    .addTo(map)
+    .bindPopup('<b><%= tripNest.title %></b><br><%= tripNest.location %>, <%= tripNest.country %>')
+    .openPopup();
+});
+</script>

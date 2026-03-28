@@ -1,0 +1,244 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+
+<div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 md:p-10">
+
+<h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+Create New TripNest
+</h1>
+
+<form action="/tripnests" method="POST" enctype="multipart/form-data" class="space-y-6" novalidate>
+
+<!-- TITLE -->
+<div>
+
+<label class="form-label">Title</label>
+
+<input
+type="text"
+name="tripnest[title]"
+placeholder="Luxury Villa in Maldives"
+required
+class="input-field peer"/>
+
+<p class="error-text">
+Title is required *
+</p>
+
+</div>
+
+
+<!-- DESCRIPTION -->
+<div>
+
+<label class="form-label">Description</label>
+
+<textarea
+name="tripnest[description]"
+rows="4"
+placeholder="Indulge in luxury in this overwater villa..."
+required
+class="input-field peer"></textarea>
+
+<p class="error-text">
+Description is required *
+</p>
+
+</div>
+
+
+<!-- IMAGE UPLOAD -->
+<div>
+
+<label class="form-label">Upload Image</label>
+
+<input
+type="file"
+name="image"
+accept="image/*"
+class="file-input"/>
+
+</div>
+
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-1">
+Category
+</label>
+
+<select name="tripnest[category]"
+class="w-full border rounded-xl px-4 py-2">
+
+<option value="trending">Trending</option>
+<option value="rooms">Rooms</option>
+<option value="cities">Iconic Cities</option>
+<option value="mountains">Mountains</option>
+<option value="castles">Castles</option>
+<option value="pools">Pools</option>
+<option value="camping">Camping</option>
+<option value="farms">Farms</option>
+<option value="arctic">Arctic</option>
+
+</select>
+</div>
+
+
+<!-- PRICE -->
+<div>
+
+<label class="form-label">
+Price (₹ per night)
+</label>
+
+<input
+type="number"
+name="tripnest[price]"
+placeholder="6000"
+required
+class="input-field peer"/>
+
+<p class="error-text">
+Please enter valid price *
+</p>
+
+</div>
+
+
+<!-- LOCATION + COUNTRY -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+<div>
+
+<label class="form-label">Location</label>
+
+<input
+type="text"
+name="tripnest[location]"
+placeholder="Maldives"
+required
+class="input-field peer"/>
+
+<p class="error-text">
+Location required *
+</p>
+
+</div>
+
+
+<div>
+
+<label class="form-label">Country</label>
+
+<input
+type="text"
+name="tripnest[country]"
+placeholder="Maldives"
+required
+class="input-field peer"/>
+
+<p class="error-text">
+Country required *
+</p>
+
+</div>
+
+</div>
+
+
+<!-- SUBMIT BUTTON -->
+
+<button
+type="submit"
+class="submit-btn">
+
+Create TripNest
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+
+<style>
+
+/* INPUT FIELD */
+
+.input-field{
+width:100%;
+border:1px solid #d1d5db;
+border-radius:12px;
+padding:10px 14px;
+font-size:14px;
+transition:0.2s;
+outline:none;
+}
+
+.input-field:focus{
+border-color:#f59e0b;
+box-shadow:0 0 0 2px rgba(245,158,11,0.25);
+}
+
+
+/* LABEL */
+
+.form-label{
+display:block;
+font-size:14px;
+font-weight:600;
+color:#374151;
+margin-bottom:6px;
+}
+
+
+/* ERROR */
+
+.error-text{
+display:none;
+font-size:12px;
+color:#ef4444;
+margin-top:4px;
+}
+
+.peer:invalid + .error-text{
+display:block;
+}
+
+
+/* FILE INPUT */
+
+.file-input{
+width:100%;
+padding:8px;
+border-radius:10px;
+border:1px dashed #9ca3af;
+background:#f9fafb;
+cursor:pointer;
+}
+
+.file-input:hover{
+background:#f3f4f6;
+}
+
+
+/* BUTTON */
+
+.submit-btn{
+width:100%;
+background:#f59e0b;
+color:white;
+padding:12px;
+border-radius:12px;
+font-weight:600;
+font-size:15px;
+transition:0.2s;
+}
+
+.submit-btn:hover{
+background:#d97706;
+}
+
+</style>

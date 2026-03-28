@@ -1,0 +1,40 @@
+<% layout("/layouts/boilerplate") %>
+<div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8 justify-self-center my-10">
+
+<h1 class="text-2xl font-bold mb-6">Edit Profile</h1>
+
+<form action="/profile?_method=PUT" method="POST" enctype="multipart/form-data">
+
+<div class="mb-4">
+
+<label class="block font-semibold mb-1">
+Username
+</label>
+
+<input type="text" name="username"
+value="<%= user.username %>"
+class="w-full border rounded p-2">
+
+</div>
+
+
+<div class="mb-4">
+
+<label class="block font-semibold mb-1">
+Change Profile Image
+</label>
+
+<input type="file" name="profileImage" class="w-full border rounded p-2">
+
+</div>
+
+
+<button class="bg-amber-500 text-white px-4 py-2 rounded">
+
+Update Profile
+
+</button>
+
+</form>
+
+</div>

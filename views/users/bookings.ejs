@@ -1,0 +1,75 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="max-w-5xl mx-auto mt-10 px-4">
+
+<h1 class="text-3xl font-bold mb-8 text-center">
+My Bookings
+</h1>
+
+<% if(bookings.length === 0){ %>
+
+<p class="text-center text-gray-500 text-lg">
+You have no bookings yet.
+</p>
+
+<% } %>
+
+<% bookings.forEach(b => { %>
+
+<div class="bg-white shadow-lg rounded-xl p-5 mb-6 flex flex-col md:flex-row gap-6">
+
+<!-- Image -->
+<img 
+src="<%= b.tripNest.image.url %>" 
+class="w-full md:w-1/2 h-30 sm:h-55 object-cover rounded-lg">
+
+<!-- Details -->
+<div class="flex-1">
+
+<h2 class="text-xl font-semibold mb-2">
+<%= b.tripNest.title %>
+</h2>
+
+<p class="text-gray-500 mb-2">
+📍 <%= b.tripNest.location %>, <%= b.tripNest.country %>
+</p>
+
+<p>
+<strong>Check In :</strong> 
+<%= b.checkIn.toDateString() %>
+</p>
+
+<p>
+<strong>Check Out :</strong> 
+<%= b.checkOut.toDateString() %>
+</p>
+
+<p class="text-amber-600 font-bold text-lg mt-2">
+₹ <%= b.totalPrice.toLocaleString("en-IN") %>
+</p>
+
+<!-- Buttons -->
+<div class="flex gap-4 mt-5 flex-wrap">
+
+<form action="/bookings/<%= b._id %>?_method=DELETE" method="POST">
+<button
+class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
+Cancel Booking
+</button>
+</form>
+
+<a
+href="/tripnests/<%= b.tripNest._id %>"
+class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+View
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>

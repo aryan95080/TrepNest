@@ -1,0 +1,210 @@
+<% layout("/layouts/boilerplate")%>
+
+<!-- Hero Section -->
+<section class="bg-gray-50 py-16 px-4 text-center">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">Contact Us 📬</h1>
+    <p class="text-gray-600">Have questions, feedback, or travel ideas? We'd love to hear from you.</p>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-16 px-4">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10">
+    
+    <!-- Contact Form -->
+    <div class="bg-white shadow-lg rounded-xl p-8">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">Send us a message</h2>
+      
+      <form id="contactForm" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+          <input type="text" name="name" required
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none"
+            placeholder="Enter your name">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <input type="email" name="email" required
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none"
+            placeholder="Enter your email">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+          <textarea name="message" rows="5" required
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500 outline-none"
+            placeholder="Write your message..."></textarea>
+        </div>
+        
+        <button type="submit"
+          class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg transition w-full md:w-auto">
+          Send Message
+        </button>
+        
+        <div id="formMessage" class="hidden text-sm"></div>
+      </form>
+    </div>
+    
+    <!-- Contact Info Cards -->
+    <div class="space-y-6">
+      <% const contactInfo = [
+        { title: "Our Office", content: "TripNest Travel Company<br>Bhopal, Madhya Pradesh, India", icon: "fa-location-dot" },
+        { title: "Email", content: "support@tripnest.com", icon: "fa-envelope" },
+        { title: "Phone", content: "+91 98765 43210", icon: "fa-phone" }
+      ]; %>
+      
+      <% contactInfo.forEach(info => { %>
+        <div class="bg-white shadow-lg rounded-xl p-6 hover:shadow-xl transition group">
+          <div class="flex items-start gap-3">
+            <i class="fa-solid <%= info.icon %> text-amber-500 text-xl mt-1"></i>
+            <div>
+              <h3 class="text-xl font-bold mb-2"><%= info.title %></h3>
+              <p class="text-gray-600"><%- info.content %></p>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+      
+      <!-- Social Media -->
+      <div class="bg-white shadow-lg rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <i class="fa-solid fa-share-alt text-amber-500 text-xl"></i>
+          <h3 class="text-xl font-bold">Follow Us</h3>
+        </div>
+        <div class="flex gap-6">
+          <% const socials = [
+            { icon: "fa-instagram", link: "https://instagram.com"},
+            { icon: "fa-twitter", link: "https://twitter.com" },
+            { icon: "fa-youtube", link: "https://youtube.com" },
+            { icon: "fa-facebook", link: "https://facebook.com" }
+          ]; %>
+          <% socials.forEach(social => { %>
+            <a href="<%= social.link %>" class="text-gray-600 hover:text-amber-500 text-2xl transition transform hover:scale-110 inline-block" target="_blank">
+              <i class="fa-brands <%= social.icon %>"></i>
+            </a>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Map Section -->
+<section class="px-4 pb-16">
+  <div class="max-w-7xl mx-auto rounded-xl overflow-hidden shadow-lg">
+    <iframe
+      src="https://www.google.com/maps?q=Bhopal&output=embed"
+      width="100%"
+      height="400"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      title="TripNest Location Map">
+    </iframe>
+  </div>
+</section>
+
+<script>
+  (function() {
+    // Handle form submission
+    const form = document.getElementById('contactForm');
+    const messageDiv = document.getElementById('formMessage');
+    
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Basic validation
+        if (!data.name || !data.email || !data.message) {
+          showMessage('Please fill in all fields', 'error');
+          return;
+        }
+        
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+          showMessage('Please enter a valid email address', 'error');
+          return;
+        }
+        
+        // Show loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Sending...';
+        submitBtn.disabled = true;
+        
+        try {
+          // Simulate API call (replace with actual endpoint)
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Success - Store in localStorage for demo
+          const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+          messages.push({ ...data, timestamp: new Date().toISOString() });
+          localStorage.setItem('contactMessages', JSON.stringify(messages));
+          
+          showMessage('✓ Message sent successfully! We\'ll get back to you soon.', 'success');
+          form.reset();
+          
+        } catch (error) {
+          showMessage('❌ Failed to send message. Please try again.', 'error');
+        } finally {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+    
+    function showMessage(text, type) {
+      if (!messageDiv) return;
+      messageDiv.textContent = text;
+      messageDiv.className = `text-sm p-3 rounded-lg mt-3 ${
+        type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+      }`;
+      messageDiv.classList.remove('hidden');
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        messageDiv.classList.add('hidden');
+      }, 5000);
+    }
+    
+    // Optional: Add form validation on input
+    const inputs = form?.querySelectorAll('input, textarea');
+    inputs?.forEach(input => {
+      input.addEventListener('input', () => {
+        if (input.checkValidity()) {
+          input.classList.remove('border-red-500');
+          input.classList.add('border-gray-300');
+        }
+      });
+      
+      input.addEventListener('invalid', (e) => {
+        e.preventDefault();
+        input.classList.add('border-red-500');
+      });
+    });
+  })();
+</script>
+
+<style>
+  /* Smooth transitions */
+  .transition {
+    transition: all 0.3s ease;
+  }
+  
+  /* Custom focus styles */
+  input:focus, textarea:focus {
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+  }
+  
+  /* Responsive improvements */
+  @media (max-width: 768px) {
+    .bg-white.shadow-lg.rounded-xl.p-8 {
+      padding: 1.5rem;
+    }
+  }
+</style>
