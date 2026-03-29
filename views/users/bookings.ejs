@@ -16,22 +16,25 @@ You have no bookings yet.
 
 <% bookings.forEach(b => { %>
 
+<% if(b.tripNest){ %>
+
 <div class="bg-white shadow-lg rounded-xl p-5 mb-6 flex flex-col md:flex-row gap-6">
 
 <!-- Image -->
 <img 
-src="<%= b.tripNest.image.url %>" 
-class="w-full md:w-1/2 h-30 sm:h-55 object-cover rounded-lg">
+src="<%= b.tripNest?.image?.url || '/images/default.jpg' %>" 
+class="w-full md:w-1/2 h-40 sm:h-56 object-cover rounded-lg">
 
 <!-- Details -->
 <div class="flex-1">
 
 <h2 class="text-xl font-semibold mb-2">
-<%= b.tripNest.title %>
+<%= b.tripNest?.title || "Listing Removed" %>
 </h2>
 
 <p class="text-gray-500 mb-2">
-📍 <%= b.tripNest.location %>, <%= b.tripNest.country %>
+📍 <%= b.tripNest?.location || "Unknown Location" %>, 
+<%= b.tripNest?.country || "" %>
 </p>
 
 <p>
@@ -69,6 +72,8 @@ View
 </div>
 
 </div>
+
+<% } %>
 
 <% }) %>
 
