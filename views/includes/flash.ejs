@@ -1,9 +1,9 @@
 <div class="m-2 right-3 sm:right-5 w-full sm:w-auto flex flex-col items-end px-3">
 
   <% if(success && success.length){ %>
-  <div class="flex items-center justify-between gap-4 
+  <div id="successFlash" class="flex items-center justify-between gap-4 
   bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg
-  w-full  mb-3">
+  w-full mb-3">
 
     <span class="text-sm sm:text-base"><%= success %></span>
 
@@ -17,9 +17,9 @@
   <% } %>
 
   <% if(error && error.length){ %>
-  <div class="flex items-center justify-between gap-4 
+  <div id="errorFlash" class="flex items-center justify-between gap-4 
   bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg
-  w-full ">
+  w-full">
 
     <span class="text-sm sm:text-base"><%= error %></span>
 
@@ -33,3 +33,13 @@
   <% } %>
 
 </div>
+
+<script>
+  setTimeout(() => {
+    const success = document.getElementById("successFlash");
+    const error = document.getElementById("errorFlash");
+
+    if (success) success.remove();
+    if (error) error.remove();
+  }, 5000); // 5 seconds
+</script>
