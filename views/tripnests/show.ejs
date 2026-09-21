@@ -11,9 +11,9 @@
       <!-- Owner & Title -->
       <div class="flex items-center justify-between mb-3">
         <p class="text-sm text-gray-600">Owned by 
-          <span class="font-semibold text-amber-600"><%= tripNest.owner.username %></span>
+          <span class="font-semibold text-amber-600"><%= tripNest.owner ? tripNest.owner.username : "Unknown" %></span>
         </p>
-        <% if(currUser && tripNest.owner._id.equals(currUser._id)){ %>
+        <% if(currUser && tripNest.owner && tripNest.owner._id.equals(currUser._id)){ %>
           <div class="flex gap-2">
             <a href="/tripnests/<%= tripNest._id %>/edit" 
                class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Edit</a>
@@ -86,11 +86,11 @@
         <% for(let review of tripNest.reviews){ %>
           <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-amber-400">
             <div class="flex items-center justify-between mb-2">
-              <p class="font-bold text-amber-700"><%= review.author.username %></p>
+              <p class="font-bold text-amber-700"><%= review.author ? review.author.username : "Anonymous" %></p>
               <p class="text-amber-500 text-sm font-medium"><%= review.rating %> ★</p>
             </div>
             <p class="text-gray-600"><%= review.comment %></p>
-            <% if(currUser && review.author._id.equals(currUser._id)){ %>
+            <% if(currUser && review.author && review.author._id.equals(currUser._id)){ %>
               <form action="/tripnests/<%=tripNest._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="mt-3">
                 <button class="text-xs bg-red-100 hover:bg-red-500 text-red-600 hover:text-white px-3 py-1.5 rounded-lg transition">Delete</button>
               </form>
